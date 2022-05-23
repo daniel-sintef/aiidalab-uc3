@@ -4,7 +4,8 @@
 *~
 .*.ipynb
 .DS_Store
-.ipynb_checkpoints/*
+.ipynb_checkpoints/
 .vscode
 __pycache__/
 ~*
+.Trash*/
