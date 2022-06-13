@@ -7,7 +7,7 @@ template = """
   <th style="text-align:center">Use Case 3</th>
 <tr>
   <td valign="top"><ul>
-    <li><a href="{appbase}/example.ipynb" target="_blank">Example notebook</a></li>
+    <li><a href="{appbase}/uc3.ipynb" target="_blank">Run application.</a></li>
   </ul></td>
 </tr>
 </table>
