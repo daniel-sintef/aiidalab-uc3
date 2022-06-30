@@ -1,0 +1,11 @@
+label: auto_mpuc3
+hostname: localhost
+description: ""
+transport: local
+scheduler: direct
+shebang: "#!/bin/bash"
+work_dir: "/home/{username}/scratch"
+mpirun_command: " "
+mpiprocs_per_machine: 0
+prepend_text: " "
+append_text: " "

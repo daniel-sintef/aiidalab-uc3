@@ -1,0 +1,8 @@
+label: "test-mpuc3-model3"
+description: "Local test for model3 "
+input_plugin: "marketusercase3"
+on_computer: true
+remote_abs_path: "/home/{username}/marketplace_uc3/run_model3.sh"
+computer: "local"
+prepend_text: " "
+append_text: " "
