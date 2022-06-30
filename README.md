@@ -31,6 +31,12 @@ ssh-add PATH/TO/PRIVATE/SSH/KEY
 >
 > Indeed, you should add this line to your `~/.bashrc` file in order to have a running SSH Agent always when you open a terminal.
 
+> **Note** If you see the following message:
+> ``the --mount option requires BuildKit``
+> You must run with the following instead:
+> ``DOCKER_BUILDKIT=1 docker build --ssh default -t aiidalab_mp_uc3 . ``
+> See https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds for more information
+
 Now you can build the Docker image locally from the [Dockerfile](Dockerfile):
 
 ```shell
