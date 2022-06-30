@@ -1,0 +1,2 @@
+use_login_shell: "1"
+safe_interval: "0"
