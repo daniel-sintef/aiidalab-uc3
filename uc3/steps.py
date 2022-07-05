@@ -29,7 +29,6 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
             input_plugin="marketusercase3"
         )
         self.computer_code_selector.observe(self._set_code_value, ["value"])
-        self.computer_code_selector.observe(self._update_state, ["value"])
 
         items_layout = ipw.Layout(padding="20px", align_items="stretch", width="75%")
 
