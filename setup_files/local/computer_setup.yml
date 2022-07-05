@@ -1,4 +1,4 @@
-label: auto_mpuc3
+label: local 
 hostname: localhost
 description: ""
 transport: local

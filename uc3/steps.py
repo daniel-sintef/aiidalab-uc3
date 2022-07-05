@@ -153,7 +153,7 @@ class ConfigureUserInputStep(ipw.VBox, WizardAppWidgetStep):
         whether the "Next step" button is enabled.
         """
 
-        if self.user_inputs and self.mpuc3_code:
+        if self.user_inputs:
             # The configuration is non-empty, we can move on to the next step.
             self.state = self.State.SUCCESS
         else:
