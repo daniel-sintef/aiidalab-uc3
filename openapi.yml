@@ -1,0 +1,55 @@
+---
+openapi: 3.0.0
+
+info:
+  title: AiiDAlab UC3 App
+  description: Use Case 3 Application delivered through AiiDAlab
+  version: 0.1.0
+  x-application-name: AiiDAlab UC3 App
+  x-oauth-client:
+    client-id:
+    scopes:
+      - email
+      - openid
+      - profile
+    callback: https://materials-marketplace.aiidalab.net/hub/oauth_callback
+  x-external-hostname: https://materials-marketplace.aiidalab.net
+  # x-image: https://raw.githubusercontent.com/aiidalab/aiidalab-qe/v20.12.0/miscellaneous/logos/QE.jpg
+  x-contacts:
+    - daniel.marchand@sintef.no
+  x-products:
+    - name: AiiDAlab UC3 App
+      productId: 55305f0c-f1a1-4ee3-8c31-a31c45b61af3
+servers:
+  - url: https://materials-marketplace.aiidalab.net
+
+paths:
+  /hub/user-redirect/apps/apps/aiidalab-mp-uc3/uc3.ipynb:
+    get:
+      description: UC3 App
+      operationId: frontend
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Page not found
+
+  /hub/health:
+    get:
+      description: To check if an application is alive
+      operationId: heartbeat
+      security: []
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
