@@ -9,11 +9,12 @@ from aiida.orm import ArrayData, Code, Dict, ProcessNode
 from aiida.plugins import CalculationFactory
 from aiidalab_widgets_base import (
     AiidaNodeViewWidget,
-    ComputationalResourcesWidget,
     ProcessMonitor,
     ProcessNodesTreeWidget,
     WizardAppWidgetStep,
 )
+
+from uc3.base_widgets_mod import ComputationalResourcesWidget
 
 
 class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):

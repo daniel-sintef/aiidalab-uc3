@@ -1,7 +1,7 @@
 username:               "kurianv"
 port:                   22
 look_for_keys:          True
-key_filename:
+key_filename: ""
 timeout:                60
 allow_agent:            True
 proxy_jump:             "kurianv@unity-gpu-01.sintef.no"
