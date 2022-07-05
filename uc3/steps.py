@@ -35,6 +35,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
         # create confirmation button
         self.confirm_button = ipw.Button(
             description="Confirm choice",
+            disabled=True,
         )
         self.confirm_button.on_click(self._update_state)
 
@@ -46,6 +47,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
         )
 
     def _set_code_value(self, _) -> None:
+        self.confirm_button.disabled = not bool(self.computer_code_selector.value)
         self.mpuc3_code = self.computer_code_selector.value
 
     def reset(self):
@@ -292,7 +294,7 @@ class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
 
     @traitlets.observe("process")
     def _observe_process(self, change):
-        print("MONITOR STATE", self.state)
+        self._logger.info("MONITOR STATE %s", self.state)
         self._update_state()
 
 
