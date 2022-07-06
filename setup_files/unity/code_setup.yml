@@ -1,0 +1,13 @@
+label: "FSP"
+description: "Flame spray code "
+input_plugin: "marketusercase3"
+on_computer: true
+remote_abs_path: "/share/apps/modulessoftware/ansys_inc/v201/fluent/bin/fluent"
+computer: "unity"
+prepend_text: | 
+    module purge
+    module load fluent/2020R1
+    export FLUENT_GUI=off
+    cp -r /home/janc/UC3_Marketplace/Final_A1flame/* ./
+append_text: |
+    rm ./core*

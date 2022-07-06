@@ -207,7 +207,14 @@ class ConfirmUserInputStep(ipw.VBox, WizardAppWidgetStep):
         fluentcalc_builder = fluent_calcjob.get_builder()
         fluentcalc_builder.user_inputs = Dict(dict=self.user_inputs)
         fluentcalc_builder.code = self.mpuc3_code
-        # fluentcalc_builder.metadata.dry_run = True
+
+        # Not sure how to get around hard coding this... 
+        fluentcalc_builder.metadata.options.resources = {
+            'num_machines': 1 ,
+            'num_mpiprocs_per_machine':  20
+        }
+
+        #fluentcalc_builder.metadata.dry_run = True
         self.process = submit(fluentcalc_builder)
         self.submit = True
         self._update_state()
