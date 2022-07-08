@@ -1,16 +1,16 @@
-username:               "janc"
+username:               "danielma"
 port:                   22
 look_for_keys:          True
-key_filename:           "/home/aiida/.ssh/aiida"
+key_filename:           "/home/aiida/.ssh/stepstone"
 timeout:                60
 allow_agent:            True
 proxy_jump:             ""
-proxy_command:          ""
+proxy_command:          "ssh -W unity.sintef.no:22 danielm@stepstone.sintef.no"
 compress:               True
 gss_auth:               False
 gss_kex:                False
 gss_deleg_creds:        False
-gss_host:               "unity.sintef.no"
+gss_host:               ""
 load_system_host_keys:  True
 key_policy:             "AutoAddPolicy"
 use_login_shell:        True

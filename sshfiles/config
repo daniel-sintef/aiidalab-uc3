@@ -1,0 +1,8 @@
+Host jumpunity 
+    HostName unity.sintef.no
+    User danielma
+    IdentityFile /home/aiida/.ssh/stepstone
+    ProxyCommand ssh -W %h:%p danielm@stepstone.sintef.no
+
+Host stepstone.sintef.no 
+    IdentityFile /home/aiida/.ssh/stepstone
