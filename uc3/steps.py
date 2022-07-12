@@ -4,6 +4,7 @@ import logging
 
 import ipywidgets as ipw
 import traitlets
+import shortuuid
 from aiida.engine import ProcessState, submit
 from aiida.orm import ArrayData, Code, Dict, ProcessNode
 from aiida.plugins import CalculationFactory
@@ -13,9 +14,96 @@ from aiidalab_widgets_base import (
     ProcessNodesTreeWidget,
     WizardAppWidgetStep,
 )
+from pathlib import Path 
+from copy import copy
 
 from uc3.base_widgets_mod import ComputationalResourcesWidget
+STYLE = {"description_width": "180px"}
+LAYOUT = {"width": "400px"}
 
+
+
+class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
+    def __init__(self, **kwargs):
+        self._inp_private_key = ipw.FileUpload(
+            accept="",
+            layout=LAYOUT,
+            style=STYLE,
+            description="Choose Private key",
+            multiple=False,
+        )
+        self._inp_private_key.observe(self._set_private_key, ["value"])
+        self._key_fname = None
+        self._key_content = None
+        
+        self._upload_button = ipw.Button(
+            description="Upload Key",
+            disabled=True,
+        )
+        self._upload_button.on_click(self._upload_key_press)
+        self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
+
+ 
+        children = [self._inp_private_key,
+                    self._upload_button]
+        super().__init__(children, **kwargs)
+        
+    def _set_private_key(self, _=None):
+        self._logger.info("F: _set_private_key")
+        # unwrap private key file and setting temporary private_key content
+        private_key_abs_fname, private_key_content = self._private_key
+        if private_key_abs_fname is None:  # check private key file
+            self.message = "Please upload your private key file."
+            return False
+        
+        self._upload_button.disabled = False
+
+    @property
+    def _private_key(self):
+        """Unwrap private key file and setting filename and file content."""
+        self._logger.info("F: _private_key START")
+
+        if self._inp_private_key.value:
+            (fname, _value), *_ = self._inp_private_key.value.items()
+            content = copy(_value["content"])
+            self._inp_private_key.value.clear()
+            # self._inp_private_key._counter = 0  # pylint: disable=protected-access
+            self._logger.info("F: _private_key END")     
+            self._key_fname = fname
+            self._key_content = content 
+            return fname, content
+
+        return None, None
+
+    def _add_private_key(self, private_key_fname, private_key_content):
+        """
+        param private_key_fname: string
+        param private_key_content: bytes
+        """
+        fpath = Path.home() / ".ssh" / private_key_fname
+        if fpath.exists():
+            # if file already exist and has the same content
+            if fpath.read_bytes() == private_key_content:
+                return fpath.name
+
+            fpath = fpath / "_" / shortuuid.uuid()
+        fpath.write_bytes(private_key_content)
+
+        fpath.chmod(0o600)
+
+        return fpath
+    
+    def _upload_key_press(self, _=None):
+        # # Write private key in ~/.ssh/ and use the name of upload file,
+        # if exist, generate random string and append to filename then override current name.
+        # self._add_private_key(private_key_abs_fname, private_key_content)
+        self._logger.info("F: _upload_key_press")
+        
+        try:
+            self._add_private_key(self._key_fname, self._key_content)
+        except Exception as e:
+            self._logger.exception(e)
+        self.state = self.State.SUCCESS
 
 class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
     """Setup AiiDA Computer and Code."""
@@ -85,8 +173,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
         with self.hold_trait_notifications():
             for child in self.children:
                 child.disabled = change["new"]
-
-
+                
 class ConfigureUserInputStep(ipw.VBox, WizardAppWidgetStep):
 
     disabled = traitlets.Bool()
