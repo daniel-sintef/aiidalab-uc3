@@ -1,12 +1,13 @@
 """The AiiDAlab App steps."""
 import json
 import logging
+import subprocess
 
 import ipywidgets as ipw
 import traitlets
 import shortuuid
 from aiida.engine import ProcessState, submit
-from aiida.orm import ArrayData, Code, Dict, ProcessNode
+from aiida.orm import ArrayData, Code, Dict, ProcessNode, load_code
 from aiida.plugins import CalculationFactory
 from aiidalab_widgets_base import (
     AiidaNodeViewWidget,
@@ -44,7 +45,7 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
         self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
 
         text_description = ipw.HTML(
-            value="   Skip Manually to the next step if you have already uploaded a key",
+            value="   Key must be called stepstone. \n Skip Manually to the next step if you have already uploaded a key",
         )
  
         children = [text_description,
@@ -109,6 +110,52 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
             self._logger.exception(e)
         self.state = self.State.SUCCESS
 
+class InstallComputerAndCode(ipw.VBox, WizardAppWidgetStep):
+    def __init__(self, **kwargs):
+
+        self._install_codecomputer_button = ipw.Button(
+            description="Click to Install Code & Computer",
+            layout=ipw.Layout(width='50%')
+        )
+        self._install_codecomputer_button.on_click(self._install_codecomputer)
+        self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
+ 
+        children = [self._install_codecomputer_button]
+        super().__init__(children, **kwargs)
+
+    def _install_codecomputer(self, _=None):
+        self._logger.info("F: _install_codecomputer")
+        try:
+            self._logger.info("F: _install_codecomputer, skip start")
+            load_code('FSP')
+            self.message = "Code already installed!"
+            self.state = self.State.SUCCESS
+            self._logger.info("F: _install_codecomputer, skip success!")
+            return
+        except Exception:
+            pass
+            
+        self._logger.info("F: _install_codecomputer, full install")
+        self.message = "Installing Computer"
+        keygen_cmd = [
+            "sh",
+            "/home/aiida/apps/aiidalab-mp-uc3/setup_unity.sh"
+        ]
+        subprocess.run(keygen_cmd, capture_output=True)
+        self.state = self.State.SUCCESS
+
+        
+
+class ExitMessage(ipw.VBox, WizardAppWidgetStep):
+    def __init__(self, **kwargs):
+
+        text_description = ipw.HTML(
+            value="   Installation done, you can now go to the UC3 app! ",
+        )
+ 
+        children = [text_description]
+        super().__init__(children, **kwargs)
+
 class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
     """Setup AiiDA Computer and Code."""
 
@@ -119,7 +166,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
 
         # create descritpive text 
         text_description = ipw.HTML(
-            value="   Use of FSP@unity is recommened",
+            value="   Use of FSP@unity is recommened. If you do not see it in the list run the install_uc3 app first!",
         )
         # create code selection field
         self.computer_code_selector = ComputationalResourcesWidget(
