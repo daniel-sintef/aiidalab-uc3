@@ -43,8 +43,12 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
         self._upload_button.on_click(self._upload_key_press)
         self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
 
+        text_description = ipw.HTML(
+            value="   Skip Manually to the next step if you have already uploaded a key",
+        )
  
-        children = [self._inp_private_key,
+        children = [text_description,
+                    self._inp_private_key,
                     self._upload_button]
         super().__init__(children, **kwargs)
         
