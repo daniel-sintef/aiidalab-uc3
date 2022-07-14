@@ -112,6 +112,11 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
     mpuc3_code = traitlets.Instance(Code, allow_none=True)
 
     def __init__(self, **kwargs) -> None:
+
+        # create descritpive text 
+        text_description = ipw.HTML(
+            value="   Use of FSP@unity is recommened",
+        )
         # create code selection field
         self.computer_code_selector = ComputationalResourcesWidget(
             input_plugin="marketusercase3"
@@ -129,7 +134,9 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
 
         # setup widget
         super().__init__(
-            (self.computer_code_selector, self.confirm_button),
+            (text_description,
+             self.computer_code_selector,
+             self.confirm_button),
             layout=items_layout,
             **kwargs,
         )
@@ -182,12 +189,12 @@ class ConfigureUserInputStep(ipw.VBox, WizardAppWidgetStep):
     def __init__(self, **kwargs) -> None:
         # create fields to enter user values
         self.description_label_default = [
-            ["ATSBcons", "ATSB Concentration", 1.94],
-            ["Precurfr", "Precursor Volume Flow Rate", 40.0],
-            ["Dispfr", "Dispersion Volume Flow Rate", 72.0],
-            ["Pilotch4fr", "Pilot Methane Volume Flow Rate", 4.0],
-            ["Piloto2fr", "Pilot Oxygen Volume Flow Rate", 8.0],
-            ["Fanrate", "Fan Extraction Volume Flow Rate", 270.0],
+            ["ATSBcons", "ATSB Concentration (mol/l)", 1.94],
+            ["Precurfr", "Precursor Volume Flow Rate (ml/min)", 40.0],
+            ["Dispfr", "Dispersion Volume Flow Rate (l/min)", 72.0],
+            ["Pilotch4fr", "Pilot Methane Volume Flow Rate (l/min)", 4.0],
+            ["Piloto2fr", "Pilot Oxygen Volume Flow Rate (l/min)", 8.0],
+            ["Fanrate", "Fan Extraction Volume Flow Rate (m3/h)", 270.0],
         ]
 
         def _setup_input_entry(description, init_value):
