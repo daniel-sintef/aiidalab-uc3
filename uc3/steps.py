@@ -240,12 +240,12 @@ class ConfigureUserInputStep(ipw.VBox, WizardAppWidgetStep):
     def __init__(self, **kwargs) -> None:
         # create fields to enter user values
         self.description_label_default = [
-            ["ATSBcons", "ATSB Concentration (mol/l)", 1.94],
-            ["Precurfr", "Precursor Volume Flow Rate (ml/min)", 40.0],
-            ["Dispfr", "Dispersion Volume Flow Rate (l/min)", 72.0],
-            ["Pilotch4fr", "Pilot Methane Volume Flow Rate (l/min)", 4.0],
-            ["Piloto2fr", "Pilot Oxygen Volume Flow Rate (l/min)", 8.0],
-            ["Fanrate", "Fan Extraction Volume Flow Rate (m3/h)", 270.0],
+            ["ATSBcons", "ATSB Concentration (mol/l)", 0],
+            ["Precurfr", "Precursor Volume Flow Rate (ml/min)", 0],
+            ["Dispfr", "Dispersion Volume Flow Rate (l/min)", 0],
+            ["Pilotch4fr", "Pilot Methane Volume Flow Rate (l/min)", 0],
+            ["Piloto2fr", "Pilot Oxygen Volume Flow Rate (l/min)", 0],
+            ["Fanrate", "Fan Extraction Volume Flow Rate (m3/h)", 0],
         ]
 
         def _setup_input_entry(description, init_value):
