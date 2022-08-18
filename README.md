@@ -14,7 +14,13 @@ This Jupyter-based app is intended to be run with [AiiDAlab](https://www.materia
 If you know the Project Access Token (PAT) available to get read access to the AiiDA plugin repository on the Fraunhofer GitLab instance for the MarketPlace project, this approach is for you.
 
 Store the PAT in a file called `.mp_gitlab_token` in the root of this repository locally.
-Then run the following command:
+
+Now you have two options:
+
+1. Use the custom [`Dockerfile`](Dockerfile), or
+2. Use the standard AiiDAlab Docker stack from Docker Hub.
+
+For the first option, run the following command:
 
 ```shell
 docker build --secret id=mp_gitlab_token,src=.mp_gitlab_token -t aiidalab_mp_uc3 .
@@ -25,6 +31,20 @@ docker build --secret id=mp_gitlab_token,src=.mp_gitlab_token -t aiidalab_mp_uc3
 > You must run with the following instead:
 > ``DOCKER_BUILDKIT=1 docker build --secret id=mp_gitlab_token,src=.mp_gitlab_token -t aiidalab_mp_uc3 .``
 > See https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds for more information
+
+Now, you can jump to the [Running AiiDAlab](#running-aiidalab) section below.
+
+Otherwise, for the second option, skip building a local Docker image altogether, and also skip the [Running AiiDAlab](#running-aiidalab) section and instead run the following:
+
+```shell
+docker run --rm -d -p 8888:8888 --name aiidalab_mp_uc3 -v ${PWD}:/marketplace/aiidalab-mp-uc3 aiidalab/aiidalab-docker-stack:latest
+```
+
+Then, once the AiiDAlab instance has started, you can open it, open a terminal in it and run the following command:
+
+```shell
+aiidalab install aiidalab-mp-uc3@file:///marketplace/aiidalab-mp-uc3
+```
 
 #### SSH
 

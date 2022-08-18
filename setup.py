@@ -32,7 +32,7 @@ setup(
     install_requires=(
         REQUIREMENTS
         + [
-            f"git+https://token:{gitlab_token()}@gitlab.cc-asp.fraunhofer.de/Daniel.Marchand/aiida-marketusercase3.git"
+            f"aiida-marketusercase3 @ git+https://token:{gitlab_token()}@gitlab.cc-asp.fraunhofer.de/Daniel.Marchand/aiida-marketusercase3.git"
         ]
     )
 )
