@@ -2,10 +2,12 @@
 import json
 import logging
 import subprocess
+from copy import copy
+from pathlib import Path
 
 import ipywidgets as ipw
-import traitlets
 import shortuuid
+import traitlets
 from aiida.engine import ProcessState, submit
 from aiida.orm import ArrayData, Code, Dict, ProcessNode, load_code
 from aiida.plugins import CalculationFactory
@@ -15,13 +17,11 @@ from aiidalab_widgets_base import (
     ProcessNodesTreeWidget,
     WizardAppWidgetStep,
 )
-from pathlib import Path 
-from copy import copy
 
 from uc3.base_widgets_mod import ComputationalResourcesWidget
+
 STYLE = {"description_width": "180px"}
 LAYOUT = {"width": "400px"}
-
 
 
 class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
@@ -36,7 +36,7 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
         self._inp_private_key.observe(self._set_private_key, ["value"])
         self._key_fname = None
         self._key_content = None
-        
+
         self._upload_button = ipw.Button(
             description="Upload Key",
             disabled=True,
@@ -47,12 +47,10 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
         text_description = ipw.HTML(
             value="   Key must be called stepstone. \n Skip Manually to the next step if you have already uploaded a key",
         )
- 
-        children = [text_description,
-                    self._inp_private_key,
-                    self._upload_button]
+
+        children = [text_description, self._inp_private_key, self._upload_button]
         super().__init__(children, **kwargs)
-        
+
     def _set_private_key(self, _=None):
         self._logger.info("F: _set_private_key")
         # unwrap private key file and setting temporary private_key content
@@ -60,7 +58,7 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
         if private_key_abs_fname is None:  # check private key file
             self.message = "Please upload your private key file."
             return False
-        
+
         self._upload_button.disabled = False
 
     @property
@@ -73,9 +71,9 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
             content = copy(_value["content"])
             self._inp_private_key.value.clear()
             # self._inp_private_key._counter = 0  # pylint: disable=protected-access
-            self._logger.info("F: _private_key END")     
+            self._logger.info("F: _private_key END")
             self._key_fname = fname
-            self._key_content = content 
+            self._key_content = content
             return fname, content
 
         return None, None
@@ -97,29 +95,30 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
         fpath.chmod(0o600)
 
         return fpath
-    
+
     def _upload_key_press(self, _=None):
         # # Write private key in ~/.ssh/ and use the name of upload file,
         # if exist, generate random string and append to filename then override current name.
         # self._add_private_key(private_key_abs_fname, private_key_content)
         self._logger.info("F: _upload_key_press")
-        
+
         try:
             self._add_private_key(self._key_fname, self._key_content)
         except Exception as e:
             self._logger.exception(e)
         self.state = self.State.SUCCESS
 
+
 class InstallComputerAndCode(ipw.VBox, WizardAppWidgetStep):
     def __init__(self, **kwargs):
 
         self._install_codecomputer_button = ipw.Button(
             description="Click to Install Code & Computer",
-            layout=ipw.Layout(width='50%')
+            layout=ipw.Layout(width="50%"),
         )
         self._install_codecomputer_button.on_click(self._install_codecomputer)
         self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
- 
+
         children = [self._install_codecomputer_button]
         super().__init__(children, **kwargs)
 
@@ -127,24 +126,20 @@ class InstallComputerAndCode(ipw.VBox, WizardAppWidgetStep):
         self._logger.info("F: _install_codecomputer")
         try:
             self._logger.info("F: _install_codecomputer, skip start")
-            load_code('FSP')
+            load_code("FSP")
             self.message = "Code already installed!"
             self.state = self.State.SUCCESS
             self._logger.info("F: _install_codecomputer, skip success!")
             return
         except Exception:
             pass
-            
+
         self._logger.info("F: _install_codecomputer, full install")
         self.message = "Installing Computer"
-        keygen_cmd = [
-            "sh",
-            "/home/aiida/apps/aiidalab-mp-uc3/setup_unity.sh"
-        ]
+        keygen_cmd = ["sh", "/home/aiida/apps/aiidalab-mp-uc3/setup_unity.sh"]
         subprocess.run(keygen_cmd, capture_output=True)
         self.state = self.State.SUCCESS
 
-        
 
 class ExitMessage(ipw.VBox, WizardAppWidgetStep):
     def __init__(self, **kwargs):
@@ -152,9 +147,10 @@ class ExitMessage(ipw.VBox, WizardAppWidgetStep):
         text_description = ipw.HTML(
             value="   Installation done, you can now go to the UC3 app! ",
         )
- 
+
         children = [text_description]
         super().__init__(children, **kwargs)
+
 
 class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
     """Setup AiiDA Computer and Code."""
@@ -164,7 +160,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
 
     def __init__(self, **kwargs) -> None:
 
-        # create descritpive text 
+        # create descritpive text
         text_description = ipw.HTML(
             value="   Use of FSP@unity is recommened. If you do not see it in the list run the install_uc3 app first!",
         )
@@ -185,9 +181,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
 
         # setup widget
         super().__init__(
-            (text_description,
-             self.computer_code_selector,
-             self.confirm_button),
+            (text_description, self.computer_code_selector, self.confirm_button),
             layout=items_layout,
             **kwargs,
         )
@@ -231,7 +225,8 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
         with self.hold_trait_notifications():
             for child in self.children:
                 child.disabled = change["new"]
-                
+
+
 class ConfigureUserInputStep(ipw.VBox, WizardAppWidgetStep):
 
     disabled = traitlets.Bool()
@@ -353,13 +348,13 @@ class ConfirmUserInputStep(ipw.VBox, WizardAppWidgetStep):
         fluentcalc_builder.user_inputs = Dict(dict=self.user_inputs)
         fluentcalc_builder.code = self.mpuc3_code
 
-        # Not sure how to get around hard coding this... 
+        # Not sure how to get around hard coding this...
         fluentcalc_builder.metadata.options.resources = {
-            'num_machines': 1 ,
-            'num_mpiprocs_per_machine':  20
+            "num_machines": 1,
+            "num_mpiprocs_per_machine": 20,
         }
 
-        #fluentcalc_builder.metadata.dry_run = True
+        # fluentcalc_builder.metadata.dry_run = True
         self.process = submit(fluentcalc_builder)
         self.submit = True
         self._update_state()

@@ -1,5 +1,5 @@
 label: unity
-hostname: jumpunity 
+hostname: jumpunity
 description: "unity"
 transport: "ssh"
 scheduler: "slurm"
