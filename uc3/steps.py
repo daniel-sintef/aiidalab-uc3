@@ -136,7 +136,13 @@ class InstallComputerAndCode(ipw.VBox, WizardAppWidgetStep):
 
         self._logger.info("F: _install_codecomputer, full install")
         self.message = "Installing Computer"
-        keygen_cmd = ["sh", "/home/aiida/apps/aiidalab-mp-uc3/setup_unity.sh"]
+        keygen_cmd = [
+            "sh",
+            "/home/aiida/apps/aiidalab-mp-uc3/setup_unity.sh",
+            "&&",
+            "reentry",
+            "scan",
+        ]
         subprocess.run(keygen_cmd, capture_output=True)
         self.state = self.State.SUCCESS
 
@@ -145,7 +151,7 @@ class ExitMessage(ipw.VBox, WizardAppWidgetStep):
     def __init__(self, **kwargs):
 
         text_description = ipw.HTML(
-            value="   Installation done, you can now go to the UC3 app! ",
+            value='   Installation done, you can now go to the <a href="uc3.ipynb">UC3 app</a>! ',
         )
 
         children = [text_description]
@@ -162,7 +168,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
 
         # create descritpive text
         text_description = ipw.HTML(
-            value="   Use of FSP@unity is recommened. If you do not see it in the list run the install_uc3 app first!",
+            value="   Use of FSP@unity is recommened. If you do not see it in the list run the <a href=\"install_uc3.ipynb\">'Install UC3' app</a> first!",
         )
         # create code selection field
         self.computer_code_selector = ComputationalResourcesWidget(
