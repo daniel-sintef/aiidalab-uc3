@@ -12,3 +12,4 @@ __pycache__/
 .*_cache/
 
 sshfiles/stepstone*
+.mp_gitlab_token
