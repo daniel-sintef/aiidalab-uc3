@@ -19,7 +19,7 @@ def gitlab_token(source: "Optional[Union[Path, str]]" = None) -> str:
             f"Could not find file ({token_file_location}) containing the Fraunhofer "
             "GitLab Project Access Token !"
         )
-    return token_file_location.read_text(encoding="utf8")
+    return token_file_location.read_text(encoding="utf8").strip()
 
 
 REQUIREMENTS = (
