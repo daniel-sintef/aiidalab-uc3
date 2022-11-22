@@ -1,8 +1,10 @@
-Host jumpunity 
+Host jumpunity
     HostName unity.sintef.no
     User danielma
     IdentityFile /home/aiida/.ssh/stepstone
+    StrictHostKeyChecking no
     ProxyCommand ssh -W %h:%p danielm@stepstone.sintef.no
 
-Host stepstone.sintef.no 
+Host stepstone.sintef.no
+    StrictHostKeyChecking no
     IdentityFile /home/aiida/.ssh/stepstone

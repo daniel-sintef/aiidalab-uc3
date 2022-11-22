@@ -10,3 +10,6 @@ __pycache__/
 ~*
 .Trash*/
 .*_cache/
+
+sshfiles/stepstone*
+.mp_gitlab_token

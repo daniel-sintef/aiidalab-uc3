@@ -5,7 +5,7 @@ key_filename:           "/home/aiida/.ssh/stepstone"
 timeout:                60
 allow_agent:            True
 proxy_jump:             ""
-proxy_command:          "ssh -W unity.sintef.no:22 danielm@stepstone.sintef.no"
+proxy_command:          "ssh -q -W unity.sintef.no:22 danielm@stepstone.sintef.no"
 compress:               True
 gss_auth:               False
 gss_kex:                False

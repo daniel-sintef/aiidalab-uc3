@@ -1,4 +1,4 @@
-label: local 
+label: local
 hostname: localhost
 description: ""
 transport: local
