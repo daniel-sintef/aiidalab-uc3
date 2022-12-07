@@ -8,3 +8,8 @@ Host jumpunity
 Host stepstone.sintef.no
     StrictHostKeyChecking no
     IdentityFile /home/aiida/.ssh/stepstone
+
+Host droplet 
+    Hostname 161.35.206.72
+    User root 
+    IdentityFile /home/aiida/.ssh/aiidalabkey

@@ -1,0 +1,8 @@
+label: "FSP-dummy"
+description: "Dummy Flame spray code "
+input_plugin: "dummy_marketuc3"
+on_computer: true
+remote_abs_path: "/home/aiida/bin/wait_watch.sh"
+computer: "droplet"
+prepend_text: ""
+append_text: ""

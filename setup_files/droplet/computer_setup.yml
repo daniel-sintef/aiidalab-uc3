@@ -1,0 +1,11 @@
+label: droplet 
+hostname: 161.35.206.72
+description: "droplet instance"
+transport: "ssh"
+scheduler: "direct"
+shebang: "#!/bin/bash"
+work_dir: "/home/aiida"
+mpirun_command: "run -np {tot_num_mpiprocs}"
+mpiprocs_per_machine: 1 
+prepend_text: " "
+append_text: " "

@@ -1,5 +1,6 @@
 """The AiiDAlab App steps."""
 import json
+import uuid
 import logging
 import subprocess
 from copy import copy
@@ -9,7 +10,7 @@ import ipywidgets as ipw
 import shortuuid
 import traitlets
 from aiida.engine import ProcessState, submit
-from aiida.orm import ArrayData, Code, Dict, ProcessNode, load_code
+from aiida.orm import ArrayData, Code, Dict, Str, ProcessNode, load_code
 from aiida.plugins import CalculationFactory
 from aiidalab_widgets_base import (
     AiidaNodeViewWidget,
@@ -45,7 +46,7 @@ class UploadSshKey(ipw.VBox, WizardAppWidgetStep):
         self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
 
         text_description = ipw.HTML(
-            value="   Key must be called stepstone. \n Skip Manually to the next step if you have already uploaded a key",
+            value="   Key must be called aiidalabkey. \n Skip Manually to the next step if you have already uploaded a key",
         )
 
         children = [text_description, self._inp_private_key, self._upload_button]
@@ -138,7 +139,7 @@ class InstallComputerAndCode(ipw.VBox, WizardAppWidgetStep):
         self.message = "Installing Computer"
         keygen_cmd = [
             "sh",
-            "/home/aiida/apps/aiidalab-mp-uc3/setup_unity.sh",
+            "/home/aiida/apps/aiidalab-mp-uc3/setup_droplet.sh",
             "&&",
             "reentry",
             "scan",
@@ -172,7 +173,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
         )
         # create code selection field
         self.computer_code_selector = ComputationalResourcesWidget(
-            input_plugin="marketusercase3"
+            input_plugin="dummy_marketuc3"
         )
         self.computer_code_selector.observe(self._set_code_value, ["value"])
 
@@ -349,10 +350,11 @@ class ConfirmUserInputStep(ipw.VBox, WizardAppWidgetStep):
             )
 
     def submit_calc(self, button):
-        fluent_calcjob = CalculationFactory("marketusercase3")
+        fluent_calcjob = CalculationFactory("dummy_marketuc3")
         fluentcalc_builder = fluent_calcjob.get_builder()
         fluentcalc_builder.user_inputs = Dict(dict=self.user_inputs)
         fluentcalc_builder.code = self.mpuc3_code
+        fluentcalc_builder.job_uuid = Str(str(uuid.uuid4()))
 
         # Not sure how to get around hard coding this...
         fluentcalc_builder.metadata.options.resources = {

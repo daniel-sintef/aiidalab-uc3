@@ -54,7 +54,7 @@ class ComputationalResourcesDatabaseWidget(
                     f"{code_setup['label']}-{computer_path.name}": code_setup,
                 }
                 app_database["default"] = computer_path.name
-            app_database = {"marketusercase3": app_database}
+            app_database = {"dummy_marketuc3": app_database}
 
             database = deepcopy(aiida_code_registry_database)
             database.update(app_database)

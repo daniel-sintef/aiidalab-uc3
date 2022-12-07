@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y git openssh-client && rm -rf /var/lib/a
 # Download and install AiiDA plugin for MarketPlace UC3
 RUN git config --global user.name "MarketPlace" && git config --global user.email "noreply@materials-marketplace.eu"
 RUN mkdir -p /marketplace
-RUN --mount=type=secret,id=mp_gitlab_token git clone "https://token:$(cat /run/secrets/mp_gitlab_token)@gitlab.cc-asp.fraunhofer.de/Daniel.Marchand/aiida-marketusercase3.git" /marketplace/aiida-marketusercase3
+RUN git clone git@github.com:daniel-sintef/aiida-marketusercase3.git  /marketplace/aiida-marketusercase3
 RUN pip install -e /marketplace/aiida-marketusercase3 && reentry scan
 
 # Copy in UC3 App
