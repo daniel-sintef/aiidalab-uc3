@@ -325,6 +325,10 @@ class ConfirmUserInputStep(ipw.VBox, WizardAppWidgetStep):
 
     process = traitlets.Instance(ProcessNode, allow_none=True)
     submit = traitlets.Bool()
+    job_uuid = str(uuid.uuid4())
+    job_uuidhtml = ipw.HTML(
+        value="<h4>Please email your SINTEF contact with the following UUID: {}</h4>".format(job_uuid),
+    )
     user_inputs = traitlets.Dict(allow_none=True)
     mpuc3_code = traitlets.Instance(Code, allow_none=True)
 
@@ -334,7 +338,7 @@ class ConfirmUserInputStep(ipw.VBox, WizardAppWidgetStep):
         # The second step has only function: executing the order by clicking on this button.
         self.submitcalc_button = ipw.Button(description="Submit calculation")
         self.submitcalc_button.on_click(self.submit_calc)
-        super().__init__([self.userinputs_label, self.submitcalc_button], **kwargs)
+        super().__init__([self.userinputs_label, self.job_uuidhtml, self.submitcalc_button], **kwargs)
 
     def reset(self):
         self.submit = None
@@ -354,7 +358,7 @@ class ConfirmUserInputStep(ipw.VBox, WizardAppWidgetStep):
         fluentcalc_builder = fluent_calcjob.get_builder()
         fluentcalc_builder.user_inputs = Dict(dict=self.user_inputs)
         fluentcalc_builder.code = self.mpuc3_code
-        fluentcalc_builder.job_uuid = Str(str(uuid.uuid4()))
+        fluentcalc_builder.job_uuid = Str(self.job_uuid)
 
         # Not sure how to get around hard coding this...
         fluentcalc_builder.metadata.options.resources = {
