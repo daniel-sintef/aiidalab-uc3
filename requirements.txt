@@ -1,1 +1,1 @@
-importlib_resources>=5.7,<6
+importlib_resources~=5.2

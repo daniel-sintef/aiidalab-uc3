@@ -1,8 +1,8 @@
 label: unity
 hostname: jumpunity
 description: "unity"
-transport: "ssh"
-scheduler: "slurm"
+transport: "core.ssh"
+scheduler: "core.slurm"
 shebang: "#!/bin/bash"
 work_dir: "/work/danielma/aiida"
 mpirun_command: "run -np {tot_num_mpiprocs}"

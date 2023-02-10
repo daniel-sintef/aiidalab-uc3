@@ -1,8 +1,7 @@
 label: "FSP-local"
 description: "Local test for model3 "
-input_plugin: "marketusercase3"
-on_computer: true
-remote_abs_path: "/marketplace/aiida-marketusercase3/examples/run_model3.sh"
+default_calc_job_plugin: "marketusercase3"
+filepath_executable: "/marketplace/aiida-marketusercase3/examples/run_model3.sh"
 computer: "local"
 prepend_text: " "
 append_text: " "

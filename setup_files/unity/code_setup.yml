@@ -1,8 +1,7 @@
 label: "FSP"
 description: "Flame spray code "
-input_plugin: "marketusercase3"
-on_computer: true
-remote_abs_path: "/share/apps/modulessoftware/ansys_inc/v201/fluent/bin/fluent"
+default_calc_job_plugin: "marketusercase3"
+filepath_executable: "/share/apps/modulessoftware/ansys_inc/v201/fluent/bin/fluent"
 computer: "unity"
 prepend_text: |
     module purge
