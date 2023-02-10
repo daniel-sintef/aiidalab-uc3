@@ -13,7 +13,7 @@ repos:
       args: [--markdown-linebreak-ext=md]
 
   - repo: https://github.com/timothycrosley/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
     - id: isort
       args: ["--profile", "black", "--filter-files", "--skip-gitignore"]
@@ -22,6 +22,11 @@ repos:
     rev: 22.6.0
     hooks:
       - id: black
+
+  - repo: https://github.com/kynan/nbstripout
+  rev: 0.6.1
+  hooks:
+      - id: nbstripout
 
   - repo: https://gitlab.com/pycqa/flake8
     rev: '3.9.2'

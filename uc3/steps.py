@@ -173,7 +173,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
         )
         # create code selection field
         self.computer_code_selector = ComputationalResourcesWidget(
-            input_plugin="dummy_marketuc3"
+            default_calc_job_plugin="dummy_marketuc3"
         )
         self.computer_code_selector.observe(self._set_code_value, ["value"])
 
@@ -394,7 +394,7 @@ class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
 
     def __init__(self, **kwargs):
         self.process_tree = ProcessNodesTreeWidget()
-        ipw.dlink((self, "process"), (self.process_tree, "process"))
+        ipw.dlink((self, "process"), (self.process_tree, "value"))
 
         self.node_view = AiidaNodeViewWidget(layout={"width": "auto", "height": "auto"})
         ipw.dlink(
@@ -412,7 +412,7 @@ class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
                 self._update_state,
             ],
         )
-        ipw.dlink((self, "process"), (self.process_monitor, "process"))
+        ipw.dlink((self, "process"), (self.process_monitor, "value"))
 
         self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
 

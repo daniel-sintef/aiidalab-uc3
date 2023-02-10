@@ -1,8 +1,8 @@
 label: local
 hostname: localhost
 description: ""
-transport: local
-scheduler: direct
+transport: core.local
+scheduler: core.direct
 shebang: "#!/bin/bash"
 work_dir: "/home/{username}/scratch"
 mpirun_command: " "

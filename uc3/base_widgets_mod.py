@@ -30,7 +30,7 @@ class ComputationalResourcesDatabaseWidget(
         """Overload the `update()` method to use custom registry."""
         with self.hold_trait_notifications():
             aiida_code_registry_database: dict = requests.get(
-                "https://aiidateam.github.io/aiida-code-registry/database.json"
+                "https://aiidateam.github.io/aiida-code-registry/database_v2_1.json"
             ).json()
 
             app_database = {}
@@ -60,8 +60,8 @@ class ComputationalResourcesDatabaseWidget(
             database.update(app_database)
 
             self.database = (
-                self.clean_up_database(database, self.input_plugin)
-                if self.input_plugin
+                self.clean_up_database(database, self.default_calc_job_plugin)
+                if self.default_calc_job_plugin
                 else database
             )
 
@@ -102,7 +102,7 @@ class ComputationalResourcesWidget(OriginalComputationalResourcesWidget):
 
         # Setting up codes and computers.
         self.comp_resources_database = ComputationalResourcesDatabaseWidget(
-            input_plugin=self.input_plugin
+            default_calc_job_plugin=self.default_calc_job_plugin
         )
 
         self.ssh_computer_setup = SshComputerSetup()
