@@ -1,15 +1,15 @@
 Host jumpunity
     HostName unity.sintef.no
     User danielma
-    IdentityFile /home/aiida/.ssh/stepstone
+    IdentityFile /home/jovyan/.ssh/stepstone
     StrictHostKeyChecking no
     ProxyCommand ssh -W %h:%p danielm@stepstone.sintef.no
 
 Host stepstone.sintef.no
     StrictHostKeyChecking no
-    IdentityFile /home/aiida/.ssh/stepstone
+    IdentityFile /home/jovyan/.ssh/stepstone
 
 Host droplet 
     Hostname 161.35.206.72
     User root 
-    IdentityFile /home/aiida/.ssh/aiidalabkey
+    IdentityFile /home/jovyan/.ssh/jovyanlabkey

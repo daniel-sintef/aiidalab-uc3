@@ -1,7 +1,7 @@
 username:               "root"
 port:                   22
 look_for_keys:          True
-key_filename:           "/home/aiida/.ssh/aiidalabkey"
+key_filename:           "/home/jovyan/.ssh/aiidalabkey"
 timeout:                60
 allow_agent:            True
 proxy_jump:             ""

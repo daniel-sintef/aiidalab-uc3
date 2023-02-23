@@ -139,10 +139,7 @@ class InstallComputerAndCode(ipw.VBox, WizardAppWidgetStep):
         self.message = "Installing Computer"
         keygen_cmd = [
             "sh",
-            "/home/aiida/apps/aiidalab-mp-uc3/setup_droplet.sh",
-            "&&",
-            "reentry",
-            "scan",
+            "/home/jovyan/apps/aiidalab-uc3/setup_droplet.sh",
         ]
         subprocess.run(keygen_cmd, capture_output=True)
         self.state = self.State.SUCCESS
@@ -195,7 +192,7 @@ class ComputerCodeSetupStep(ipw.VBox, WizardAppWidgetStep):
 
     def _set_code_value(self, _) -> None:
         self.confirm_button.disabled = not bool(self.computer_code_selector.value)
-        self.mpuc3_code = self.computer_code_selector.value
+        self.mpuc3_code = load_code(self.computer_code_selector.value)
 
     def reset(self):
         with self.hold_trait_notifications():
@@ -394,7 +391,8 @@ class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
 
     def __init__(self, **kwargs):
         self.process_tree = ProcessNodesTreeWidget()
-        ipw.dlink((self, "process"), (self.process_tree, "value"))
+        ipw.dlink((self, "process"), (self.process_tree, "value"),
+                  transform=lambda x: x.uuid if x is not None else None)
 
         self.node_view = AiidaNodeViewWidget(layout={"width": "auto", "height": "auto"})
         ipw.dlink(
@@ -412,7 +410,8 @@ class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
                 self._update_state,
             ],
         )
-        ipw.dlink((self, "process"), (self.process_monitor, "value"))
+        ipw.dlink((self, "process"), (self.process_monitor, "value"),
+                  transform=lambda x: x.uuid if x is not None else None)
 
         self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
 
