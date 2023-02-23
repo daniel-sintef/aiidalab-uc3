@@ -22,17 +22,13 @@ def gitlab_token(source: "Optional[Union[Path, str]]" = None) -> str:
     return token_file_location.read_text(encoding="utf8").strip()
 
 
-REQUIREMENTS = (
-    (Path(__file__).resolve().parent / "requirements.txt")
-    .read_text(encoding="utf8")
-    .splitlines()
-)
-
 setup(
     install_requires=(
-        REQUIREMENTS
-        + [
-            f"aiida-marketusercase3 @ git+https://github.com/daniel-sintef/aiida-marketusercase3.git@master"
+        [
+            f"aiida-marketusercase3 @ git+https://github.com/daniel-sintef/aiida-marketusercase3.git@master",
+            "aiida-core~=2.1,<3",
+            "aiidalab>=21.09.0",
+            "aiidalab-widgets-base==2.0.0b1",
         ]
     )
 )
