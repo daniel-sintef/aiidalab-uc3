@@ -1,5 +1,5 @@
 USER=jovyan
-ROOT=/home/${USER}/apps/aiidalab-uc3
+ROOT=$(dirname $(realpath "$0"))
 
 if [ -f "/home/${USER}/.ssh/config" ]; then
     cat $ROOT/sshfiles/config >> /home/$USER/.ssh/config
