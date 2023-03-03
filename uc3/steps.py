@@ -10,7 +10,7 @@ import ipywidgets as ipw
 import shortuuid
 import traitlets
 from aiida.engine import ProcessState, submit
-from aiida.orm import ArrayData, Code, Dict, Str, ProcessNode, load_code
+from aiida.orm import ArrayData, Code, Dict, Str, ProcessNode, load_code, load_node
 from aiida.plugins import CalculationFactory
 from aiidalab_widgets_base import (
     AiidaNodeViewWidget,
@@ -386,13 +386,12 @@ class ConfirmUserInputStep(ipw.VBox, WizardAppWidgetStep):
 
 class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
 
-    process = traitlets.Instance(ProcessNode, allow_none=True)
+    process = traitlets.Unicode(allow_none=True)
     output = traitlets.Instance(ArrayData, allow_none=True)
 
     def __init__(self, **kwargs):
         self.process_tree = ProcessNodesTreeWidget()
-        ipw.dlink((self, "process"), (self.process_tree, "value"),
-                  transform=lambda x: x.uuid if x is not None else None)
+        ipw.dlink((self, "process"), (self.process_tree, "value"))
 
         self.node_view = AiidaNodeViewWidget(layout={"width": "auto", "height": "auto"})
         ipw.dlink(
@@ -410,8 +409,7 @@ class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
                 self._update_state,
             ],
         )
-        ipw.dlink((self, "process"), (self.process_monitor, "value"),
-                  transform=lambda x: x.uuid if x is not None else None)
+        ipw.dlink((self, "process"), (self.process_monitor, "value"))
 
         self._logger = kwargs.pop("logger", logging.getLogger("aiidalab_mp_uc3"))
 
@@ -429,7 +427,8 @@ class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
         if self.process is None:
             self.state = self.State.INIT
         else:
-            process_state = self.process.process_state
+            process = load_node(self.process)
+            process_state = process.process_state
             if process_state in (
                 ProcessState.CREATED,
                 ProcessState.RUNNING,
@@ -444,9 +443,9 @@ class MonitorProcessStep(ipw.VBox, WizardAppWidgetStep):
                 self._logger.info("M: SUCCESS 1")
                 self.state = self.State.SUCCESS
                 self._logger.info("M: SUCCESS 2")
-                self._logger.info(self.process)
+                self._logger.info(process)
                 try:
-                    self.output = self.process.outputs.output
+                    self.output = process.outputs.output
                 except Exception as e:
                     self._logger.exception(e)
 
@@ -484,6 +483,7 @@ class DisplayFinalOutput(ipw.VBox, WizardAppWidgetStep):
             self.final_output.value = (
                 f"<h4>Configuration</h4><pre>{json.dumps(display_dict, indent=2)}</pre>"
             )
+            self.state = self.State.SUCCESS
         else:
             self.final_output.value = (
                 "<h4>Configuration</h4>[Please configure user inputs]"
