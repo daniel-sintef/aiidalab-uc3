@@ -236,16 +236,19 @@ class ConfigureUserInputStep(ipw.VBox, WizardAppWidgetStep):
     disabled = traitlets.Bool()
     user_inputs = traitlets.Dict(allow_none=True)
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, description_label_default=None, **kwargs) -> None:
         # create fields to enter user values
-        self.description_label_default = [
-            ["ATSBcons", "ATSB Concentration (mol/l)", 0],
-            ["Precurfr", "Precursor Volume Flow Rate (ml/min)", 0],
-            ["Dispfr", "Dispersion Volume Flow Rate (l/min)", 0],
-            ["Pilotch4fr", "Pilot Methane Volume Flow Rate (l/min)", 0],
-            ["Piloto2fr", "Pilot Oxygen Volume Flow Rate (l/min)", 0],
-            ["Fanrate", "Fan Extraction Volume Flow Rate (m3/h)", 0],
-        ]
+        if description_label_default is not None:
+            self.description_label_default = description_label_default
+        else:
+            self.description_label_default = [
+                ["ATSBcons", "ATSB Concentration (mol/l)", 0],
+                ["Precurfr", "Precursor Volume Flow Rate (ml/min)", 0],
+                ["Dispfr", "Dispersion Volume Flow Rate (l/min)", 0],
+                ["Pilotch4fr", "Pilot Methane Volume Flow Rate (l/min)", 0],
+                ["Piloto2fr", "Pilot Oxygen Volume Flow Rate (l/min)", 0],
+                ["Fanrate", "Fan Extraction Volume Flow Rate (m3/h)", 0],
+            ]
 
         def _setup_input_entry(description, init_value):
             form_item_layout = ipw.Layout(justify_content="space-between")
