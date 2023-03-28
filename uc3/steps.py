@@ -5,6 +5,10 @@ import logging
 import subprocess
 from copy import copy
 from pathlib import Path
+import pandas as pd
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 import ipywidgets as ipw
 import shortuuid
@@ -486,6 +490,83 @@ class DisplayFinalOutput(ipw.VBox, WizardAppWidgetStep):
             self.final_output.value = (
                 f"<h4>Configuration</h4><pre>{json.dumps(display_dict, indent=2)}</pre>"
             )
+            self.state = self.State.SUCCESS
+        else:
+            self.final_output.value = (
+                "<h4>Configuration</h4>[Please configure user inputs]"
+            )
+
+class DisplayAp2FinalOutput(ipw.VBox, WizardAppWidgetStep):
+
+    output = traitlets.Instance(ArrayData, allow_none=True)
+
+    def __init__(self, **kwargs):
+        self.output_figure = plt.figure()
+        self.final_output = ipw.Output()
+
+        super().__init__([self.final_output], **kwargs)
+
+    @traitlets.observe("output")
+    def _call_observe(self, change):
+        self._observe_configuration(self, change)
+
+    def _observe_configuration(self, _, change):
+        if change["new"]:
+            output = self.output
+
+            # Assuming these arrays have the same length
+            temperature_setpoint = output.get_array("temperature_setpoint")
+            conversion = output.get_array("conversion")
+            min_ef_internal = output.get_array("min_ef_internal")
+            max_bed_temperature = output.get_array("max_bed_temperature")
+
+            # Create a DataFrame using the output variables
+            data = {
+                'temperature_setpoint': temperature_setpoint,
+                'conversion': conversion,
+                'min_ef_internal': min_ef_internal,
+                'max_bed_temperature': max_bed_temperature,
+            }
+            df = pd.DataFrame(data)
+
+            # Create the plot using the plot_data function
+            fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(8, 12))
+
+            x = df['temperature_setpoint'] - 273.15
+
+            y1 = df['conversion']
+            ax1.plot(x, y1)
+            ax1.grid()
+            ax1.set_xlabel('Temperature')
+            ax1.set_ylabel('Conversion')
+
+            y2 = df['min_ef_internal']
+            ax2.plot(x, y2)
+            ax2.grid()
+            ax2.set_xlabel('Temperature')
+            ax2.set_ylabel('Mininmal Internal Effective Factor')
+
+            y3 = df['max_bed_temperature'] - 273.15
+            ax3.plot(x, y3)
+            ax3.grid()
+            ax3.set_xlabel('Temperature')
+            ax3.set_ylabel('Max Bed Temperature')
+
+            # Save the plot to a buffer
+            buffer = BytesIO()
+            plt.savefig(buffer, format='svg')
+            plt.close()
+
+            # Convert the buffer to a base64-encoded string and create the SVG image
+            svg_data = buffer.getvalue().decode()
+            base64_data = base64.b64encode(svg_data.encode()).decode()
+            svg_image = f'<img src="data:image/svg+xml;base64,{base64_data}">'
+
+            # Show the plot
+            self.final_output.clear_output(wait=True)
+            with self.final_output:
+                display(ipw.HTML(svg_image))
+
             self.state = self.State.SUCCESS
         else:
             self.final_output.value = (
