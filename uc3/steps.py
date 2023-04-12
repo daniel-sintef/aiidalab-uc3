@@ -331,7 +331,7 @@ class ConfirmUserInputStep(ipw.VBox, WizardAppWidgetStep):
     submit = traitlets.Bool()
     job_uuid = str(uuid.uuid4())
     job_uuidhtml = ipw.HTML(
-        value="<h4>Please email your SINTEF contact with the following UUID: {}</h4>".format(job_uuid),
+        value="<h4>Please email your SINTEF contact with the following UUID: {}. Then click 'Submit calculation'.</h4>".format(job_uuid),
     )
     user_inputs = traitlets.Dict(allow_none=True)
     mpuc3_code = traitlets.Instance(Code, allow_none=True)

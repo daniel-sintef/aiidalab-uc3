@@ -10,6 +10,7 @@ template = """
     <li><a href="{appbase}/install_uc3.ipynb" target="_blank">Install application (should only be run once).</a></li>
     <li><a href="{appbase}/uc3.ipynb" target="_blank">Run application. (App 1)</a></li>
     <li><a href="{appbase}/uc3_ap2.ipynb" target="_blank">Run application. (App 2)</a></li>
+    <li><a href="{appbase}/uc3_ap3.ipynb" target="_blank">Run application. (App 3)</a></li>
   </ul></td>
 </tr>
 </table>
