@@ -143,7 +143,7 @@ class InstallComputerAndCode(ipw.VBox, WizardAppWidgetStep):
         self.message = "Installing Computer"
         keygen_cmd = [
             "sh",
-            "/home/jovyan/apps/aiidalab-uc3/setup_droplet.sh",
+            "/home/jovyan/apps/mp-uc3/setup_droplet.sh",
         ]
         subprocess.run(keygen_cmd, capture_output=True)
         self.state = self.State.SUCCESS
