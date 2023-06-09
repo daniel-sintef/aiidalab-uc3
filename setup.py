@@ -28,7 +28,7 @@ setup(
             f"aiida-marketusercase3 @ git+https://github.com/daniel-sintef/aiida-marketusercase3.git@master",
             "aiida-core~=2.1,<3",
             "aiidalab>=21.09.0",
-            "aiidalab-widgets-base==2.0.0b1",
+            "aiidalab-widgets-base==2.0.0",
         ]
     )
 )

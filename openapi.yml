@@ -12,8 +12,8 @@ info:
       - email
       - openid
       - profile
-    callback: https://materials-marketplace.aiidalab.net/hub/oauth_callback
-  x-external-hostname: https://materials-marketplace.aiidalab.net
+    callback: https://aiidalab.materials-marketplace.eu/hub/oauth_callback
+  x-external-hostname: https://aiidalab.materials-marketplace.eu
   # x-image: https://raw.githubusercontent.com/aiidalab/aiidalab-qe/v20.12.0/miscellaneous/logos/QE.jpg
   x-contacts:
     - daniel.marchand@sintef.no
@@ -21,7 +21,7 @@ info:
     - name: AiiDAlab UC3 App
       productId: 55305f0c-f1a1-4ee3-8c31-a31c45b61af3
 servers:
-  - url: https://materials-marketplace.aiidalab.net
+  - url: https://aiidalab.materials-marketplace.eu
 
 paths:
   /hub/user-redirect/apps/apps/aiidalab-mp-uc3/uc3.ipynb:
