@@ -572,3 +572,73 @@ class DisplayAp2FinalOutput(ipw.VBox, WizardAppWidgetStep):
             self.final_output.value = (
                 "<h4>Configuration</h4>[Please configure user inputs]"
             )
+
+class DisplayAp3FinalOutput(ipw.VBox, WizardAppWidgetStep):
+
+    output = traitlets.Instance(ArrayData, allow_none=True)
+
+    def __init__(self, **kwargs):
+        self.output_figure = plt.figure()
+        self.final_output = ipw.Output()
+
+        super().__init__([self.final_output], **kwargs)
+
+    @traitlets.observe("output")
+    def _call_observe(self, change):
+        self._observe_configuration(self, change)
+
+    def _observe_configuration(self, _, change):
+        if change["new"]:
+            output = self.output
+
+            # Assuming these arrays have the same length
+            temperature_setpoint = output.get_array("temperature_setpoint")
+            conversion = output.get_array("conversion")
+            max_bed_temperature = output.get_array("max_bed_temperature")
+
+            # Create a DataFrame using the output variables
+            data = {
+                'temperature_setpoint': temperature_setpoint,
+                'conversion': conversion,
+                'max_bed_temperature': max_bed_temperature,
+            }
+            df = pd.DataFrame(data)
+
+            # Create the plot using the plot_data function
+            fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(8, 12))
+
+            x = df['temperature_setpoint'] - 273.15
+
+            y1 = df['conversion']
+            ax1.plot(x, y1)
+            ax1.grid()
+            ax1.set_xlabel('Temperature')
+            ax1.set_ylabel('Conversion')
+
+            y2 = df['max_bed_temperature'] - 273.15
+            ax2.plot(x, y2)
+            ax2.grid()
+            ax2.set_xlabel('Temperature')
+            ax2.set_ylabel('Max Bed Temperature')
+
+            # Save the plot to a buffer
+            buffer = BytesIO()
+            plt.savefig(buffer, format='svg')
+            plt.close()
+
+            # Convert the buffer to a base64-encoded string and create the SVG image
+            svg_data = buffer.getvalue().decode()
+            base64_data = base64.b64encode(svg_data.encode()).decode()
+            svg_image = f'<img src="data:image/svg+xml;base64,{base64_data}">'
+
+            # Show the plot
+            self.final_output.clear_output(wait=True)
+            with self.final_output:
+                display(ipw.HTML(svg_image))
+
+            self.state = self.State.SUCCESS
+        else:
+            self.final_output.value = (
+                "<h4>Configuration</h4>[Please configure user inputs]"
+            )
+
